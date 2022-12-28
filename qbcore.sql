@@ -43,3 +43,19 @@ CREATE TABLE IF NOT EXISTS `player_contacts` (
   PRIMARY KEY (`id`),
   KEY `citizenid` (`citizenid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1;
+
+CREATE TABLE `positions` (
+  `idpos` int(11) NOT NULL,
+  `player_id` int(11) NOT NULL,
+  `citizenid` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `position` varchar(255) NOT NULL,
+  `datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DELIMITER $$
+CREATE TRIGGER `positions` AFTER UPDATE ON `players` FOR EACH ROW BEGIN
+INSERT INTO positions (player_id, citizenid, name, position, datetime) VALUES (NEW.id, NEW.citizenid, NEW.name, NEW.position, NOW());
+END
+$$
+DELIMITER ;
